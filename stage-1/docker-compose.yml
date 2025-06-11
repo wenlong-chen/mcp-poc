@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  mcp-gateway:
+    build:
+      context: ./mcp-gateway
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3000"
+    environment:
+      - SHOPPING_SERVICE_URL=http://shopping-service:3000
+    depends_on:
+      - shopping-service
+
+  shopping-service:
+    build:
+      context: ./shopping-service
+      dockerfile: Dockerfile
+    # No ports exposed to the host, only accessible within the docker network. 
