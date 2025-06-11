@@ -1,0 +1,27 @@
+services:
+  mcp-gateway:
+    build:
+      context: ./mcp-gateway
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3000"
+    environment:
+      - SHOPPING_SERVICE_URL=http://shopping-service:3000
+      - USER_SERVICE_URL=http://user-service:3000
+    depends_on:
+      - shopping-service
+      - user-service
+
+  shopping-service:
+    build:
+      context: ./shopping-service
+      dockerfile: Dockerfile
+    ports:
+      - "3002:3000"
+
+  user-service:
+    build:
+      context: ./user-service
+      dockerfile: Dockerfile
+    ports:
+      - "3003:3000"

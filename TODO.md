@@ -16,22 +16,22 @@ This document outlines the tasks for building the MCP POC project, divided into 
 - [x] Create `docker-compose.yml` in `stage-1/` to run both services.
 - [x] Provide instructions on how to run and test Stage 1.
 
-## Stage 2: OpenAPI-based Tool Auto-loading
+## Stage 2: OpenAPI-based Tool Auto-loading ✅ COMPLETED
 
-- [ ] Create `stage-2/` directory.
-- [ ] Initialize `shopping-service` in `stage-2/`.
-    - [ ] Add `@nestjs/swagger` to expose an OpenAPI spec for `GET /products/:id`.
-    - [ ] Create a `Dockerfile`.
-- [ ] Initialize `user-service` in `stage-2/`.
-    - [ ] Add `@nestjs/swagger` to expose an OpenAPI spec for `GET /users/:id`.
-    - [ ] Create a `Dockerfile`.
-- [ ] Initialize `mcp-gateway` in `stage-2/`.
-    - [ ] Implement MCP Server with Bearer Token authentication.
-    - [ ] On startup, fetch OpenAPI specs from `shopping-service` and `user-service`.
-    - [ ] Dynamically parse OpenAPI specs to create and register MCP tools with parameters.
-    - [ ] Create a `Dockerfile`.
-- [ ] Create `docker-compose.yml` in `stage-2/` to run all three services.
-- [ ] Provide instructions on how to run and test Stage 2.
+- [x] Create `stage-2/` directory.
+- [x] Initialize `shopping-service` in `stage-2/`.
+    - [x] Add `@nestjs/swagger` to expose an OpenAPI spec for `GET /products/:id`.
+    - [x] Create a `Dockerfile`.
+- [x] Initialize `user-service` in `stage-2/`.
+    - [x] Add `@nestjs/swagger` to expose an OpenAPI spec for `GET /users/:id`.
+    - [x] Create a `Dockerfile`.
+- [x] Initialize `mcp-gateway` in `stage-2/`.
+    - [x] Implement MCP Server with dynamic OpenAPI tool loading.
+    - [x] On startup, fetch OpenAPI specs from `shopping-service` and `user-service`.
+    - [x] Dynamically parse OpenAPI specs to create and register MCP tools with parameters.
+    - [x] Create a `Dockerfile`.
+- [x] Create `docker-compose.yml` in `stage-2/` to run all three services.
+- [x] Provide instructions on how to run and test Stage 2.
 
 ## Stage 3: MCP Service Mesh / Federation
 
