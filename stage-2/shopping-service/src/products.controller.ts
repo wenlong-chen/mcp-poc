@@ -7,9 +7,9 @@ export class ProductsController {
   constructor() {}
 
   @Get(':id')
-  @ApiOperation({ 
+  @ApiOperation({
     summary: 'Get product by ID',
-    operationId: 'getProductById' 
+    operationId: 'getProductById',
   })
   @ApiParam({ name: 'id', description: 'Product ID', type: 'string' })
   @ApiResponse({ status: 200, description: 'Product found' })

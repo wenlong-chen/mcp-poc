@@ -7,9 +7,9 @@ export class UsersController {
   constructor() {}
 
   @Get(':id')
-  @ApiOperation({ 
+  @ApiOperation({
     summary: 'Get user by ID',
-    operationId: 'getUserById'
+    operationId: 'getUserById',
   })
   @ApiParam({ name: 'id', description: 'User ID', type: 'string' })
   @ApiResponse({ status: 200, description: 'User found' })

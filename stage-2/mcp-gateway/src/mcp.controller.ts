@@ -72,9 +72,7 @@ export class McpController implements OnModuleInit {
 
   private async loadServiceOpenAPI(serviceName: string, serviceUrl: string) {
     try {
-      console.log(
-        `Fetching OpenAPI spec from ${serviceName} at ${serviceUrl}/api-json`,
-      );
+      console.log(`Fetching OpenAPI spec from ${serviceName} at ${serviceUrl}/api-json`);
       const response = await axios.get(`${serviceUrl}/api-json`);
       const spec: OpenAPISpec = response.data as OpenAPISpec;
 
@@ -86,29 +84,15 @@ export class McpController implements OnModuleInit {
     }
   }
 
-  private generateToolsFromOpenAPI(
-    serviceName: string,
-    serviceUrl: string,
-    spec: OpenAPISpec,
-  ) {
+  private generateToolsFromOpenAPI(serviceName: string, serviceUrl: string, spec: OpenAPISpec) {
     for (const [path, pathItem] of Object.entries(spec.paths)) {
       // Skip root path and other non-business endpoints
-      if (
-        path === '/' ||
-        path.includes('health') ||
-        path.includes('api-docs')
-      ) {
+      if (path === '/' || path.includes('health') || path.includes('api-docs')) {
         continue;
       }
       for (const [method, operation] of Object.entries(pathItem)) {
         if (method.toLowerCase() === 'get') {
-          const toolDef = this.createToolFromOperation(
-            serviceName,
-            serviceUrl,
-            path,
-            method,
-            operation,
-          );
+          const toolDef = this.createToolFromOperation(serviceName, serviceUrl, path, method, operation);
           this.toolDefinitions.push(toolDef);
         }
       }
@@ -123,16 +107,13 @@ export class McpController implements OnModuleInit {
     operation: OpenAPIOperation,
   ): ToolDefinition {
     // Extract path parameters
-    const pathParams =
-      operation.parameters?.filter((p) => p.in === 'path') || [];
+    const pathParams = operation.parameters?.filter((p) => p.in === 'path') || [];
 
     // Create zod schema for parameters
     const schemaFields: { [key: string]: z.ZodType } = {};
     pathParams.forEach((param) => {
       if (param.schema?.type === 'string') {
-        schemaFields[param.name] = z
-          .string()
-          .describe(param.schema.description || param.name);
+        schemaFields[param.name] = z.string().describe(param.schema.description || param.name);
       }
     });
 
@@ -141,26 +122,18 @@ export class McpController implements OnModuleInit {
     const toolName = operation.operationId
       ? `${serviceName}-${operation.operationId}`
       : `${serviceName}-${path.replace(/[^a-zA-Z0-9]/g, '-').replace(/--+/g, '-')}`;
-    const toolDescription =
-      operation.summary ||
-      operation.description ||
-      `Call ${method.toUpperCase()} ${path}`;
+    const toolDescription = operation.summary || operation.description || `Call ${method.toUpperCase()} ${path}`;
 
     return {
       name: toolName,
       description: toolDescription,
       parameters: schemaFields,
-      handler: async (
-        params: Record<string, string>,
-      ): Promise<CallToolResult> => {
+      handler: async (params: Record<string, string>): Promise<CallToolResult> => {
         try {
           let requestPath = path;
           // Replace path parameters
           for (const param of pathParams) {
-            requestPath = requestPath.replace(
-              `{${param.name}}`,
-              params[param.name],
-            );
+            requestPath = requestPath.replace(`{${param.name}}`, params[param.name]);
           }
 
           const response = await axios.get(`${serviceUrl}${requestPath}`);
@@ -174,8 +147,7 @@ export class McpController implements OnModuleInit {
             ],
           };
         } catch (error: unknown) {
-          const errorMessage =
-            error instanceof Error ? error.message : 'Unknown error';
+          const errorMessage = error instanceof Error ? error.message : 'Unknown error';
           return {
             content: [
               {
@@ -201,12 +173,7 @@ export class McpController implements OnModuleInit {
 
     // Add all loaded tools to the server
     this.toolDefinitions.forEach((toolDef) => {
-      server.tool(
-        toolDef.name,
-        toolDef.description,
-        toolDef.parameters,
-        toolDef.handler,
-      );
+      server.tool(toolDef.name, toolDef.description, toolDef.parameters, toolDef.handler);
     });
 
     return server;
@@ -216,8 +183,9 @@ export class McpController implements OnModuleInit {
   async handleMcpRequest(@Req() req: Request, @Res() res: Response) {
     try {
       const server = this.createServer();
-      const transport: StreamableHTTPServerTransport =
-        new StreamableHTTPServerTransport({ sessionIdGenerator: undefined });
+      const transport: StreamableHTTPServerTransport = new StreamableHTTPServerTransport({
+        sessionIdGenerator: undefined,
+      });
 
       res.on('close', () => {
         void transport.close();

@@ -15,16 +15,11 @@ const getServer = () => {
     { capabilities: { logging: {} } },
   );
 
-  server.tool(
-    'foo',
-    'Foo',
-    { bar: z.string().describe('bar') },
-    ({ bar }): CallToolResult => {
-      return {
-        content: [{ type: 'text', text: JSON.stringify({ bar }) }],
-      };
-    },
-  );
+  server.tool('foo', 'Foo', { bar: z.string().describe('bar') }, ({ bar }): CallToolResult => {
+    return {
+      content: [{ type: 'text', text: JSON.stringify({ bar }) }],
+    };
+  });
 
   server.tool(
     'get-product-info',
@@ -33,8 +28,7 @@ const getServer = () => {
       id: z.number().describe('product id'),
     },
     async ({ id }): Promise<CallToolResult> => {
-      const shoppingServiceUrl =
-        process.env.SHOPPING_SERVICE_URL || 'http://localhost:3000';
+      const shoppingServiceUrl = process.env.SHOPPING_SERVICE_URL || 'http://localhost:3000';
       const resp = await axios.get(`${shoppingServiceUrl}/products/${id}`);
 
       if (resp.status !== 200) {
@@ -68,8 +62,9 @@ export class McpController {
   async handleMcpRequest(@Req() req: Request, @Res() res: Response) {
     try {
       const server = getServer();
-      const transport: StreamableHTTPServerTransport =
-        new StreamableHTTPServerTransport({ sessionIdGenerator: undefined });
+      const transport: StreamableHTTPServerTransport = new StreamableHTTPServerTransport({
+        sessionIdGenerator: undefined,
+      });
       res.on('close', () => {
         void transport.close();
         void server.close();
