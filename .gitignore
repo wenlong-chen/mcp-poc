@@ -180,3 +180,4 @@ coverage/
 # Local configuration
 config.local.*
 settings.local.*
+/stage-3/typescript-sdk/
