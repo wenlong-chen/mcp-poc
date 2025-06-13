@@ -181,3 +181,4 @@ coverage/
 config.local.*
 settings.local.*
 /stage-3/typescript-sdk/
+/typescript-sdk/
