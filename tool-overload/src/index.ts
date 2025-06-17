@@ -815,6 +815,714 @@ const generateCarInsuranceTools = (count: number, toolPlacement: 'start' | 'midd
            required: ["claim_number", "preferred_date", "contact_info"]
          }
        }
+     },
+
+     // Additional functions to reach 100 tools
+     {
+       type: "function" as const,
+       function: {
+         name: "get_premium_history",
+         description: "Get customer's premium payment history",
+         parameters: {
+           type: "object",
+           properties: {
+             policy_number: { type: "string", description: "Policy number" },
+             months: { type: "number", description: "Number of months to retrieve" }
+           },
+           required: ["policy_number", "months"]
+         }
+       }
+     },
+     {
+       type: "function" as const,
+       function: {
+         name: "calculate_penalty",
+         description: "Calculate penalty for late payment or policy violation",
+         parameters: {
+           type: "object",
+           properties: {
+             violation_type: { type: "string", description: "Type of violation" },
+             policy_id: { type: "string", description: "Policy ID" }
+           },
+           required: ["violation_type", "policy_id"]
+         }
+       }
+     },
+     {
+       type: "function" as const,
+       function: {
+         name: "verify_identity",
+         description: "Verify customer identity for security purposes",
+         parameters: {
+           type: "object",
+           properties: {
+             customer_id: { type: "string", description: "Customer ID" },
+             verification_method: { type: "string", description: "Method of verification" }
+           },
+           required: ["customer_id", "verification_method"]
+         }
+       }
+     },
+     {
+       type: "function" as const,
+       function: {
+         name: "generate_certificate",
+         description: "Generate insurance certificate for customer",
+         parameters: {
+           type: "object",
+           properties: {
+             policy_number: { type: "string", description: "Policy number" },
+             certificate_type: { type: "string", description: "Type of certificate needed" }
+           },
+           required: ["policy_number", "certificate_type"]
+         }
+       }
+     },
+     {
+       type: "function" as const,
+       function: {
+         name: "check_fraud_indicators",
+         description: "Check for potential fraud indicators in claims or applications",
+         parameters: {
+           type: "object",
+           properties: {
+             reference_id: { type: "string", description: "Reference ID to check" },
+             check_type: { type: "string", description: "Type of fraud check" }
+           },
+           required: ["reference_id", "check_type"]
+         }
+       }
+     },
+     {
+       type: "function" as const,
+       function: {
+         name: "update_risk_profile",
+         description: "Update customer's risk profile based on new information",
+         parameters: {
+           type: "object",
+           properties: {
+             customer_id: { type: "string", description: "Customer ID" },
+             risk_factors: { type: "string", description: "New risk factors" }
+           },
+           required: ["customer_id", "risk_factors"]
+         }
+       }
+     },
+     {
+       type: "function" as const,
+       function: {
+         name: "get_competitor_rates",
+         description: "Get competitor insurance rates for comparison",
+         parameters: {
+           type: "object",
+           properties: {
+             coverage_specs: { type: "string", description: "Coverage specifications" },
+             location: { type: "string", description: "Customer location" }
+           },
+           required: ["coverage_specs", "location"]
+         }
+       }
+     },
+     {
+       type: "function" as const,
+       function: {
+         name: "schedule_survey",
+         description: "Schedule customer satisfaction survey",
+         parameters: {
+           type: "object",
+           properties: {
+             customer_id: { type: "string", description: "Customer ID" },
+             survey_type: { type: "string", description: "Type of survey" }
+           },
+           required: ["customer_id", "survey_type"]
+         }
+       }
+     },
+     {
+       type: "function" as const,
+       function: {
+         name: "process_referral",
+         description: "Process customer referral for new business",
+         parameters: {
+           type: "object",
+           properties: {
+             referrer_id: { type: "string", description: "Referring customer ID" },
+             referee_info: { type: "string", description: "Referred customer information" }
+           },
+           required: ["referrer_id", "referee_info"]
+         }
+       }
+     },
+     {
+       type: "function" as const,
+       function: {
+         name: "update_emergency_contact",
+         description: "Update emergency contact information",
+         parameters: {
+           type: "object",
+           properties: {
+             policy_number: { type: "string", description: "Policy number" },
+             contact_details: { type: "string", description: "Emergency contact details" }
+           },
+           required: ["policy_number", "contact_details"]
+         }
+       }
+     },
+     {
+       type: "function" as const,
+       function: {
+         name: "get_repair_shop_network",
+         description: "Get list of approved repair shops in customer's area",
+         parameters: {
+           type: "object",
+           properties: {
+             zip_code: { type: "string", description: "Customer's zip code" },
+             service_type: { type: "string", description: "Type of repair service needed" }
+           },
+           required: ["zip_code", "service_type"]
+         }
+       }
+     },
+     {
+       type: "function" as const,
+       function: {
+         name: "process_glassdoor_claim",
+         description: "Process windshield/glass replacement claim",
+         parameters: {
+           type: "object",
+           properties: {
+             policy_number: { type: "string", description: "Policy number" },
+             damage_details: { type: "string", description: "Glass damage details" }
+           },
+           required: ["policy_number", "damage_details"]
+         }
+       }
+     },
+     {
+       type: "function" as const,
+       function: {
+         name: "validate_vin",
+         description: "Validate vehicle identification number",
+         parameters: {
+           type: "object",
+           properties: {
+             vin_number: { type: "string", description: "Vehicle identification number" }
+           },
+           required: ["vin_number"]
+         }
+       }
+     },
+     {
+       type: "function" as const,
+       function: {
+         name: "get_weather_impact",
+         description: "Get weather impact assessment for claims",
+         parameters: {
+           type: "object",
+           properties: {
+             location: { type: "string", description: "Location of incident" },
+             date: { type: "string", description: "Date of incident" }
+           },
+           required: ["location", "date"]
+         }
+       }
+     },
+     {
+       type: "function" as const,
+       function: {
+         name: "calculate_gap_coverage",
+         description: "Calculate gap coverage for financed vehicles",
+         parameters: {
+           type: "object",
+           properties: {
+             vehicle_value: { type: "number", description: "Current vehicle value" },
+             loan_balance: { type: "number", description: "Outstanding loan balance" }
+           },
+           required: ["vehicle_value", "loan_balance"]
+         }
+       }
+     },
+     {
+       type: "function" as const,
+       function: {
+         name: "process_total_loss",
+         description: "Process total loss vehicle claim",
+         parameters: {
+           type: "object",
+           properties: {
+             claim_number: { type: "string", description: "Claim number" },
+             vehicle_details: { type: "string", description: "Vehicle details" }
+           },
+           required: ["claim_number", "vehicle_details"]
+         }
+       }
+     },
+     {
+       type: "function" as const,
+       function: {
+         name: "get_rental_coverage",
+         description: "Get rental car coverage details and availability",
+         parameters: {
+           type: "object",
+           properties: {
+             policy_number: { type: "string", description: "Policy number" },
+             rental_period: { type: "string", description: "Expected rental period" }
+           },
+           required: ["policy_number", "rental_period"]
+         }
+       }
+     },
+     {
+       type: "function" as const,
+       function: {
+         name: "update_mileage_tier",
+         description: "Update customer's mileage tier for pricing",
+         parameters: {
+           type: "object",
+           properties: {
+             policy_id: { type: "string", description: "Policy ID" },
+             annual_mileage: { type: "number", description: "Annual mileage estimate" }
+           },
+           required: ["policy_id", "annual_mileage"]
+         }
+       }
+     },
+     {
+       type: "function" as const,
+       function: {
+         name: "process_multi_vehicle_discount",
+         description: "Process multi-vehicle discount application",
+         parameters: {
+           type: "object",
+           properties: {
+             customer_id: { type: "string", description: "Customer ID" },
+             vehicle_count: { type: "number", description: "Number of vehicles" }
+           },
+           required: ["customer_id", "vehicle_count"]
+         }
+       }
+     },
+     {
+       type: "function" as const,
+       function: {
+         name: "get_telematics_data",
+         description: "Get telematics driving data for usage-based insurance",
+         parameters: {
+           type: "object",
+           properties: {
+             device_id: { type: "string", description: "Telematics device ID" },
+             data_period: { type: "string", description: "Data period to retrieve" }
+           },
+           required: ["device_id", "data_period"]
+         }
+       }
+     },
+     {
+       type: "function" as const,
+       function: {
+         name: "calculate_safe_driver_discount",
+         description: "Calculate safe driver discount based on driving record",
+         parameters: {
+           type: "object",
+           properties: {
+             driver_id: { type: "string", description: "Driver ID" },
+             record_period: { type: "string", description: "Period to analyze driving record" }
+           },
+           required: ["driver_id", "record_period"]
+         }
+       }
+     },
+     {
+       type: "function" as const,
+       function: {
+         name: "process_loyalty_discount",
+         description: "Process customer loyalty discount",
+         parameters: {
+           type: "object",
+           properties: {
+             customer_id: { type: "string", description: "Customer ID" },
+             years_with_company: { type: "number", description: "Years as customer" }
+           },
+           required: ["customer_id", "years_with_company"]
+         }
+       }
+     },
+     {
+       type: "function" as const,
+       function: {
+         name: "get_coverage_recommendations",
+         description: "Get personalized coverage recommendations for customer",
+         parameters: {
+           type: "object",
+           properties: {
+             customer_profile: { type: "string", description: "Customer profile information" },
+             current_coverage: { type: "string", description: "Current coverage details" }
+           },
+           required: ["customer_profile", "current_coverage"]
+         }
+       }
+     },
+     {
+       type: "function" as const,
+       function: {
+         name: "process_hardship_program",
+         description: "Process application for financial hardship program",
+         parameters: {
+           type: "object",
+           properties: {
+             customer_id: { type: "string", description: "Customer ID" },
+             hardship_details: { type: "string", description: "Hardship circumstances" }
+           },
+           required: ["customer_id", "hardship_details"]
+         }
+       }
+     },
+     {
+       type: "function" as const,
+       function: {
+         name: "validate_coverage_dates",
+         description: "Validate coverage effective and expiration dates",
+         parameters: {
+           type: "object",
+           properties: {
+             policy_number: { type: "string", description: "Policy number" },
+             requested_dates: { type: "string", description: "Requested coverage dates" }
+           },
+           required: ["policy_number", "requested_dates"]
+         }
+       }
+     },
+     {
+       type: "function" as const,
+       function: {
+         name: "get_state_requirements",
+         description: "Get state-specific insurance requirements",
+         parameters: {
+           type: "object",
+           properties: {
+             state: { type: "string", description: "State abbreviation" },
+             vehicle_type: { type: "string", description: "Type of vehicle" }
+           },
+           required: ["state", "vehicle_type"]
+         }
+       }
+     },
+     {
+       type: "function" as const,
+       function: {
+         name: "process_sr22_filing",
+         description: "Process SR-22 filing for high-risk drivers",
+         parameters: {
+           type: "object",
+           properties: {
+             driver_id: { type: "string", description: "Driver ID" },
+             filing_reason: { type: "string", description: "Reason for SR-22 filing" }
+           },
+           required: ["driver_id", "filing_reason"]
+         }
+       }
+     },
+     {
+       type: "function" as const,
+       function: {
+         name: "calculate_non_owner_policy",
+         description: "Calculate non-owner car insurance policy",
+         parameters: {
+           type: "object",
+           properties: {
+             driver_profile: { type: "string", description: "Driver profile" },
+             coverage_limits: { type: "string", description: "Desired coverage limits" }
+           },
+           required: ["driver_profile", "coverage_limits"]
+         }
+       }
+     },
+     {
+       type: "function" as const,
+       function: {
+         name: "process_rideshare_coverage",
+         description: "Process rideshare driver coverage application",
+         parameters: {
+           type: "object",
+           properties: {
+             driver_id: { type: "string", description: "Driver ID" },
+             rideshare_company: { type: "string", description: "Rideshare company name" }
+           },
+           required: ["driver_id", "rideshare_company"]
+         }
+       }
+     },
+     {
+       type: "function" as const,
+       function: {
+         name: "get_accident_forgiveness",
+         description: "Check accident forgiveness eligibility and benefits",
+         parameters: {
+           type: "object",
+           properties: {
+             policy_number: { type: "string", description: "Policy number" },
+             accident_date: { type: "string", description: "Date of accident" }
+           },
+           required: ["policy_number", "accident_date"]
+         }
+       }
+     },
+     {
+       type: "function" as const,
+       function: {
+         name: "process_vanishing_deductible",
+         description: "Process vanishing deductible program enrollment",
+         parameters: {
+           type: "object",
+           properties: {
+             policy_number: { type: "string", description: "Policy number" },
+             safe_driving_years: { type: "number", description: "Years of safe driving" }
+           },
+           required: ["policy_number", "safe_driving_years"]
+         }
+       }
+     },
+     {
+       type: "function" as const,
+       function: {
+         name: "calculate_new_driver_rates",
+         description: "Calculate insurance rates for new/teen drivers",
+         parameters: {
+           type: "object",
+           properties: {
+             driver_age: { type: "number", description: "Driver's age" },
+             parent_policy: { type: "string", description: "Parent policy number if applicable" }
+           },
+           required: ["driver_age"]
+         }
+       }
+     },
+     {
+       type: "function" as const,
+       function: {
+         name: "process_defensive_driving_credit",
+         description: "Process defensive driving course completion credit",
+         parameters: {
+           type: "object",
+           properties: {
+             driver_id: { type: "string", description: "Driver ID" },
+             course_certificate: { type: "string", description: "Course completion certificate number" }
+           },
+           required: ["driver_id", "course_certificate"]
+         }
+       }
+     },
+     {
+       type: "function" as const,
+       function: {
+         name: "get_claim_adjuster_notes",
+         description: "Get adjuster notes and recommendations for claim",
+         parameters: {
+           type: "object",
+           properties: {
+             claim_number: { type: "string", description: "Claim number" }
+           },
+           required: ["claim_number"]
+         }
+       }
+     },
+     {
+       type: "function" as const,
+       function: {
+         name: "process_salvage_title",
+         description: "Process insurance for vehicle with salvage title",
+         parameters: {
+           type: "object",
+           properties: {
+             vin_number: { type: "string", description: "Vehicle VIN" },
+             inspection_report: { type: "string", description: "Salvage inspection report" }
+           },
+           required: ["vin_number", "inspection_report"]
+         }
+       }
+     },
+     {
+       type: "function" as const,
+       function: {
+         name: "calculate_classic_car_coverage",
+         description: "Calculate coverage for classic/antique vehicles",
+         parameters: {
+           type: "object",
+           properties: {
+             vehicle_details: { type: "string", description: "Classic vehicle details" },
+             agreed_value: { type: "number", description: "Agreed upon value" }
+           },
+           required: ["vehicle_details", "agreed_value"]
+         }
+       }
+     },
+     {
+       type: "function" as const,
+       function: {
+         name: "process_modified_vehicle",
+         description: "Process insurance for modified/customized vehicles",
+         parameters: {
+           type: "object",
+           properties: {
+             base_vehicle: { type: "string", description: "Base vehicle information" },
+             modification_details: { type: "string", description: "Vehicle modifications" }
+           },
+           required: ["base_vehicle", "modification_details"]
+         }
+       }
+     },
+     {
+       type: "function" as const,
+       function: {
+         name: "get_fleet_discount",
+         description: "Get fleet insurance discount for multiple vehicles",
+         parameters: {
+           type: "object",
+           properties: {
+             business_info: { type: "string", description: "Business information" },
+             fleet_size: { type: "number", description: "Number of vehicles in fleet" }
+           },
+           required: ["business_info", "fleet_size"]
+         }
+       }
+     },
+     {
+       type: "function" as const,
+       function: {
+         name: "process_commercial_policy",
+         description: "Process commercial auto insurance policy",
+         parameters: {
+           type: "object",
+           properties: {
+             business_type: { type: "string", description: "Type of business" },
+             vehicle_usage: { type: "string", description: "Commercial vehicle usage" }
+           },
+           required: ["business_type", "vehicle_usage"]
+         }
+       }
+     },
+     {
+       type: "function" as const,
+       function: {
+         name: "calculate_umbrella_policy",
+         description: "Calculate umbrella insurance policy for additional liability",
+         parameters: {
+           type: "object",
+           properties: {
+             current_limits: { type: "string", description: "Current liability limits" },
+             desired_coverage: { type: "number", description: "Desired umbrella coverage amount" }
+           },
+           required: ["current_limits", "desired_coverage"]
+         }
+       }
+     },
+     {
+       type: "function" as const,
+       function: {
+         name: "process_international_coverage",
+         description: "Process international driving coverage request",
+         parameters: {
+           type: "object",
+           properties: {
+             destination_countries: { type: "string", description: "Countries to be visited" },
+             travel_duration: { type: "string", description: "Duration of international travel" }
+           },
+           required: ["destination_countries", "travel_duration"]
+         }
+       }
+     },
+     {
+       type: "function" as const,
+       function: {
+         name: "get_credit_score_impact",
+         description: "Get impact of credit score on insurance rates",
+         parameters: {
+           type: "object",
+           properties: {
+             credit_score_range: { type: "string", description: "Credit score range" },
+             state: { type: "string", description: "State (some states prohibit credit-based pricing)" }
+           },
+           required: ["credit_score_range", "state"]
+         }
+       }
+     },
+     {
+       type: "function" as const,
+       function: {
+         name: "process_payment_plan",
+         description: "Set up custom payment plan for customer",
+         parameters: {
+           type: "object",
+           properties: {
+             policy_number: { type: "string", description: "Policy number" },
+             payment_frequency: { type: "string", description: "Desired payment frequency" },
+             down_payment: { type: "number", description: "Down payment amount" }
+           },
+           required: ["policy_number", "payment_frequency"]
+         }
+       }
+     },
+     {
+       type: "function" as const,
+       function: {
+         name: "calculate_pay_per_mile",
+         description: "Calculate pay-per-mile insurance rates",
+         parameters: {
+           type: "object",
+           properties: {
+             estimated_miles: { type: "number", description: "Estimated annual miles" },
+             base_rate: { type: "number", description: "Base monthly rate" }
+           },
+           required: ["estimated_miles", "base_rate"]
+         }
+       }
+     },
+     {
+       type: "function" as const,
+       function: {
+         name: "process_policy_transfer",
+         description: "Process policy transfer to new state or address",
+         parameters: {
+           type: "object",
+           properties: {
+             policy_number: { type: "string", description: "Policy number" },
+             new_address: { type: "string", description: "New address information" },
+             effective_date: { type: "string", description: "Transfer effective date" }
+           },
+           required: ["policy_number", "new_address", "effective_date"]
+         }
+       }
+     },
+     {
+       type: "function" as const,
+       function: {
+         name: "get_policy_comparison",
+         description: "Compare different policy options for customer",
+         parameters: {
+           type: "object",
+           properties: {
+             customer_needs: { type: "string", description: "Customer's insurance needs" },
+             budget_range: { type: "string", description: "Customer's budget range" }
+           },
+           required: ["customer_needs", "budget_range"]
+         }
+       }
+     },
+     {
+       type: "function" as const,
+       function: {
+         name: "process_endorsement",
+         description: "Process policy endorsement or rider",
+         parameters: {
+           type: "object",
+           properties: {
+             policy_number: { type: "string", description: "Policy number" },
+             endorsement_type: { type: "string", description: "Type of endorsement" },
+             effective_date: { type: "string", description: "Endorsement effective date" }
+           },
+           required: ["policy_number", "endorsement_type", "effective_date"]
+         }
+       }
      }
    ];
 
