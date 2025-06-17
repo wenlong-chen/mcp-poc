@@ -117,47 +117,170 @@ npm install
 npm run start:dev
 ```
 
-## Usage Examples
+## Service Registration After Startup
 
-### 1. Register Test Services
+After successfully starting the MCP Gateway and all services using Docker Compose, you need to register the available MCP services with the gateway. This step is crucial for the federation to work properly.
+
+### 1. Wait for All Services to be Healthy
+
+First, ensure all services are running and healthy:
 
 ```bash
-# Register user-service
+# Check the status of all services
+docker-compose ps
+
+# Check gateway health
+curl http://localhost:3001/health
+
+# Expected response: {"status":"ok","timestamp":"..."}
+```
+
+### 2. Register MCP Services
+
+Register the example services that are included in the Docker Compose setup:
+
+```bash
+# Register user-service (runs on internal port 3000 in Docker network)
 curl -X POST http://localhost:3001/register \
   -H "Content-Type: application/json" \
   -H "X-API-Key: mcp-api-key-123" \
   -d '{
     "name": "user-service",
-    "url": "http://localhost:3003"
+    "url": "http://user-service:3000"
   }'
 
-# Register shopping-service
+# Register shopping-service (runs on internal port 3000 in Docker network)
 curl -X POST http://localhost:3001/register \
   -H "Content-Type: application/json" \
   -H "X-API-Key: mcp-api-key-123" \
   -d '{
     "name": "shopping-service", 
-    "url": "http://localhost:3002"
+    "url": "http://shopping-service:3000"
   }'
 ```
 
-### 2. Test MCP Connection
+### 3. Verify Service Registration
+
+Check that services were registered successfully:
 
 ```bash
-# Test using MCP CLI
+# Test MCP connection and list all available tools
+npx @modelcontextprotocol/cli mcp://localhost:3001/mcp list-tools
+
+# Alternative: Make a direct MCP request to list tools
+curl -X POST http://localhost:3001/mcp \
+  -H "Content-Type: application/json" \
+  -d '{
+    "jsonrpc": "2.0",
+    "id": 1,
+    "method": "tools/list"
+  }'
+```
+
+### 4. Register External Services (Optional)
+
+For services running outside Docker or on different hosts:
+
+```bash
+# Register an external MCP service
+curl -X POST http://localhost:3001/register \
+  -H "Content-Type: application/json" \
+  -H "X-API-Key: mcp-api-key-123" \
+  -d '{
+    "name": "external-service",
+    "url": "http://external-host:port"
+  }'
+```
+
+### 5. Complete Registration Script
+
+For convenience, you can use this bash script to register all services at once:
+
+```bash
+#!/bin/bash
+
+API_KEY="mcp-api-key-123"
+GATEWAY_URL="http://localhost:3001"
+
+echo "Waiting for gateway to be ready..."
+while ! curl -f "${GATEWAY_URL}/health" >/dev/null 2>&1; do
+  echo "Gateway not ready, waiting..."
+  sleep 2
+done
+
+echo "Registering user-service..."
+curl -X POST "${GATEWAY_URL}/register" \
+  -H "Content-Type: application/json" \
+  -H "X-API-Key: ${API_KEY}" \
+  -d '{
+    "name": "user-service",
+    "url": "http://user-service:3000"
+  }'
+
+echo "Registering shopping-service..."
+curl -X POST "${GATEWAY_URL}/register" \
+  -H "Content-Type: application/json" \
+  -H "X-API-Key: ${API_KEY}" \
+  -d '{
+    "name": "shopping-service", 
+    "url": "http://shopping-service:3000"
+  }'
+
+echo "Service registration complete!"
+echo "Testing MCP connection..."
 npx @modelcontextprotocol/cli mcp://localhost:3001/mcp list-tools
 ```
 
-### 3. Manage Services
+Save this as `register-services.sh`, make it executable (`chmod +x register-services.sh`), and run it after starting the Docker Compose services.
+
+## Additional Management Examples
+
+### 1. Service Management Operations
 
 ```bash
-# Update service (re-fetch tools)
+# Update service (re-fetch tools from the service)
 curl -X PUT http://localhost:3001/update/user-service \
   -H "X-API-Key: mcp-api-key-123"
 
-# Delete service
+# Update shopping service
+curl -X PUT http://localhost:3001/update/shopping-service \
+  -H "X-API-Key: mcp-api-key-123"
+
+# Delete service (soft delete)
 curl -X DELETE http://localhost:3001/delete/user-service \
   -H "X-API-Key: mcp-api-key-123"
+
+# Re-register a previously deleted service
+curl -X POST http://localhost:3001/register \
+  -H "Content-Type: application/json" \
+  -H "X-API-Key: mcp-api-key-123" \
+  -d '{
+    "name": "user-service",
+    "url": "http://user-service:3000"
+  }'
+```
+
+### 2. MCP Protocol Testing
+
+```bash
+# List all available tools across all registered services
+npx @modelcontextprotocol/cli mcp://localhost:3001/mcp list-tools
+
+# Call a specific tool (example)
+npx @modelcontextprotocol/cli mcp://localhost:3001/mcp call-tool get_user_profile --arguments '{"user_id": "123"}'
+
+# List available resources
+npx @modelcontextprotocol/cli mcp://localhost:3001/mcp list-resources
+
+# Raw MCP JSON-RPC request to list tools
+curl -X POST http://localhost:3001/mcp \
+  -H "Content-Type: application/json" \
+  -d '{
+    "jsonrpc": "2.0",
+    "id": 1,
+    "method": "tools/list",
+    "params": {}
+  }'
 ```
 
 ## Health Check
