@@ -229,7 +229,7 @@ async function runTest(toolCount: number, scenario: any): Promise<TestResult> {
     const tools = generateCarInsuranceTools(toolCount);
     
     const response = await openai.chat.completions.create({
-      model: "gpt-4-1106-preview", // Using GPT-4 Turbo
+      model: "gpt-4.1", // Using GPT-4 Turbo
       messages: [
         {
           role: "system",
