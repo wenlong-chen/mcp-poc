@@ -159,11 +159,11 @@ export class RegistryService implements OnModuleInit {
   }
 
   async getAllTools(): Promise<RegisteredTool[]> {
-    // 获取当前版本
+    // Get current version
     const versionString = await this.redis.get('mcp:registry:version');
     const latestVersion = versionString ? parseInt(versionString, 10) : 0;
 
-    // 如果版本更新了，重新加载
+    // If version updated, reload
     if (latestVersion > this.currentVersion) {
       await this.loadAllTools();
     }
@@ -221,7 +221,7 @@ export class RegistryService implements OnModuleInit {
 
     this.allTools = allTools;
 
-    // 更新当前版本
+    // Update current version
     this.currentVersion = versionString ? parseInt(versionString, 10) : 0;
 
     this.logger.log(

@@ -1,34 +1,34 @@
 # Stage 3.1: Production-Ready MCP Federation Gateway
 
-本阶段实现了一个生产级的 MCP Federation Gateway，具有数据库持久化和 Redis 缓存功能。
+This stage implements a production-grade MCP Federation Gateway with database persistence and Redis caching functionality.
 
-## 架构特性
+## Architecture Features
 
-### 核心改进
-- ✅ **数据库持久化**: 使用 PostgreSQL 存储服务注册信息和工具元数据
-- ✅ **Redis 版本控制**: 通过 Redis 时间戳实现注册表变更检测
-- ✅ **简化表结构**: 只有 `services` 和 `service_tools` 两个核心表
-- ✅ **API Key 认证**: 管理端点使用 API Key 保护
-- ✅ **软删除**: 支持服务的软删除操作
+### Core Improvements
+- ✅ **Database Persistence**: Uses PostgreSQL to store service registration information and tool metadata
+- ✅ **Redis Version Control**: Implements registry change detection through Redis timestamps
+- ✅ **Simplified Table Structure**: Only has two core tables: `services` and `service_tools`
+- ✅ **API Key Authentication**: Management endpoints are protected with API Key
+- ✅ **Soft Delete**: Supports soft delete operations for services
 
-### 数据库设计
+### Database Design
 ```sql
--- 服务注册表
+-- Service registry table
 services: id, name, url, created_at, updated_at, deleted_at
 
--- 服务工具表（JSONB 存储）
+-- Service tools table (JSONB storage)
 service_tools: id, service_id, tools (jsonb[]), created_at, updated_at, deleted_at
 ```
 
-### Redis 版本控制
+### Redis Version Control
 - Key: `mcp:registry:version`
-- Value: 时间戳，每次注册/更新/删除时更新
+- Value: Timestamp, updated every time on register/update/delete
 
-## API 端点
+## API Endpoints
 
-### 管理端点 (需要 API Key)
+### Management Endpoints (Require API Key)
 
-#### 1. 注册服务
+#### 1. Register Service
 ```bash
 POST /register
 Content-Type: application/json
@@ -40,29 +40,29 @@ X-API-Key: your-api-key
 }
 ```
 
-#### 2. 更新服务
+#### 2. Update Service
 ```bash
 PUT /update/user-service
 X-API-Key: your-api-key
 ```
 
-#### 3. 删除服务
+#### 3. Delete Service
 ```bash
 DELETE /delete/user-service
 X-API-Key: your-api-key
 ```
 
-### MCP 端点 (无需认证)
+### MCP Endpoints (No Authentication Required)
 
-#### 4. MCP 协议通信
+#### 4. MCP Protocol Communication
 ```bash
 POST /mcp
 Content-Type: application/json
 
-{...MCP请求...}
+{...MCP request...}
 ```
 
-## 环境变量
+## Environment Variables
 
 ```bash
 # Node Environment
@@ -85,44 +85,44 @@ API_KEY=mcp-api-key-123
 PORT=3000
 ```
 
-## 运行方式
+## How to Run
 
-### 使用 Docker Compose（推荐）
+### Using Docker Compose (Recommended)
 
 ```bash
-# 构建并启动所有服务
+# Build and start all services
 docker-compose up --build
 
-# 后台运行
+# Run in background
 docker-compose up -d --build
 
-# 查看日志
+# View logs
 docker-compose logs -f mcp-gateway
 
-# 停止服务
+# Stop services
 docker-compose down
 ```
 
-### 本地开发
+### Local Development
 
 ```bash
-# 安装依赖
+# Install dependencies
 cd mcp-gateway
 npm install
 
-# 确保 PostgreSQL 和 Redis 运行
-# 设置环境变量
+# Ensure PostgreSQL and Redis are running
+# Set environment variables
 
-# 运行开发模式
+# Run development mode
 npm run start:dev
 ```
 
-## 使用示例
+## Usage Examples
 
-### 1. 注册测试服务
+### 1. Register Test Services
 
 ```bash
-# 注册 user-service
+# Register user-service
 curl -X POST http://localhost:3001/register \
   -H "Content-Type: application/json" \
   -H "X-API-Key: mcp-api-key-123" \
@@ -131,7 +131,7 @@ curl -X POST http://localhost:3001/register \
     "url": "http://localhost:3003"
   }'
 
-# 注册 shopping-service
+# Register shopping-service
 curl -X POST http://localhost:3001/register \
   -H "Content-Type: application/json" \
   -H "X-API-Key: mcp-api-key-123" \
@@ -141,51 +141,51 @@ curl -X POST http://localhost:3001/register \
   }'
 ```
 
-### 2. 测试 MCP 连接
+### 2. Test MCP Connection
 
 ```bash
-# 使用 MCP CLI 测试
+# Test using MCP CLI
 npx @modelcontextprotocol/cli mcp://localhost:3001/mcp list-tools
 ```
 
-### 3. 管理服务
+### 3. Manage Services
 
 ```bash
-# 更新服务（重新拉取工具）
+# Update service (re-fetch tools)
 curl -X PUT http://localhost:3001/update/user-service \
   -H "X-API-Key: mcp-api-key-123"
 
-# 删除服务
+# Delete service
 curl -X DELETE http://localhost:3001/delete/user-service \
   -H "X-API-Key: mcp-api-key-123"
 ```
 
-## 健康检查
+## Health Check
 
 ```bash
-# 应用健康检查
+# Application health check
 curl http://localhost:3001/health
 ```
 
-## 特性说明
+## Feature Description
 
-### 1. 简单表结构
-- **services**: 存储服务基本信息 (name, url)
-- **service_tools**: 存储工具元数据 (JSONB 数组)
+### 1. Simple Table Structure
+- **services**: Stores basic service information (name, url)
+- **service_tools**: Stores tool metadata (JSONB array)
 
-### 2. Redis 版本控制
-- 每次变更都会更新 Redis 中的时间戳
-- Gateway 可以检查版本变更来决定是否重新加载
+### 2. Redis Version Control
+- Updates Redis timestamp on every change
+- Gateway can check version changes to decide whether to reload
 
-### 3. 朴素实现策略
-- 当前版本每次 MCP 请求都从数据库读取（简单可靠）
-- 为未来优化预留了架构空间
+### 3. Naive Implementation Strategy
+- Current version reads from database on every MCP request (simple and reliable)
+- Reserves architectural space for future optimizations
 
-### 4. 认证设计
-- 管理操作需要 API Key
-- MCP 通信无需认证（符合协议设计）
+### 4. Authentication Design
+- Management operations require API Key
+- MCP communication requires no authentication (conforming to protocol design)
 
-## 技术栈
+## Technology Stack
 
 - **Framework**: NestJS
 - **Database**: PostgreSQL 15
@@ -195,10 +195,10 @@ curl http://localhost:3001/health
 - **MCP SDK**: @modelcontextprotocol/sdk
 - **Container**: Docker & Docker Compose
 
-## 下一步优化方向
+## Next Optimization Directions
 
-1. **连接池管理**: 优化数据库和 Redis 连接
-2. **缓存策略**: 智能缓存工具元数据
-3. **监控指标**: 添加 Prometheus 指标
-4. **配置管理**: 更精细的配置选项
-5. **错误处理**: 更健壮的错误恢复机制 
+1. **Connection Pool Management**: Optimize database and Redis connections
+2. **Caching Strategy**: Intelligent caching of tool metadata
+3. **Monitoring Metrics**: Add Prometheus metrics
+4. **Configuration Management**: More granular configuration options
+5. **Error Handling**: More robust error recovery mechanisms 
